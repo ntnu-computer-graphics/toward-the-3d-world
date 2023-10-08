@@ -33,6 +33,12 @@ function main() {
   }
 
   const n = initVertexBuffers(gl);
+
+  // TODO: Define Matrices
+
+
+  // TODO: Pass in Matrices to corresponding functions
+  document.onkeydown = function(ev) { keydown(ev, gl, n) }
   
   draw(gl, n)
 }
@@ -79,12 +85,6 @@ function initVertexBuffers(gl) {
   gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE*6, FSIZE*3);
   gl.enableVertexAttribArray(a_Color);
 
-  // TODO: Define Matrices
-
-
-  // TODO: Pass in Matrices to corresponding functions
-  document.onkeydown = function(ev) { keydown(ev, gl, n) }
-
   return n;
 
 }
@@ -93,13 +93,13 @@ let g_eyeX = 0; angle = 0;
 
 function keydown(ev, gl, n) {
   if (ev.keyCode == 39) { // Right
-    g_eyeX += 0.1;
+    g_eyeX -= 0.1;
   } else if (ev.keyCode == 37) { // Left
-    g_eyeX -= 0.01;
+    g_eyeX += 0.01;
   } else if (ev.keyCode == 81) { // q
-    angle -= 1;
-  } else if (ev.keyCode == 69) { // q
     angle += 1;
+  } else if (ev.keyCode == 69) { // e
+    angle -= 1;
   } else { return; }
   draw(ev, gl, n)
 }

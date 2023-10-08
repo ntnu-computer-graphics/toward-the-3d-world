@@ -79,6 +79,12 @@ function initVertexBuffers(gl) {
   gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE*6, FSIZE*3);
   gl.enableVertexAttribArray(a_Color);
 
+  // TODO: Define Matrices
+
+
+  // TODO: Pass in Matrices to corresponding functions
+  document.onkeydown = function(ev) { keydown(ev, gl, n) }
+
   return n;
 
 }
@@ -99,7 +105,9 @@ function keydown(ev, gl, n) {
 }
 
 function draw(gl, n) {
-  
+
+    // TODO: Update the angles and eye point
+
     // Set the clear color
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     // Clear the canvas

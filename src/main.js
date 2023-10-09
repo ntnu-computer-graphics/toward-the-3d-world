@@ -34,8 +34,6 @@ function main() {
 
   const n = initVertexBuffers(gl);
 
-  // gl.enable(gl.DEPTH_TEST);
-
   const modelMatrix = new Matrix4();
   const viewMatrix = new Matrix4();
   const projectionMatrix = new Matrix4();
@@ -55,17 +53,17 @@ function main() {
 
 function initVertexBuffers(gl) {
   var verticesColor = new Float32Array([
-     0.0,  0.5,  0.0,  0.4,  1.0,  0.4,
-    -0.5, -0.5, -0.0,  0.4,  1.0,  0.4,
-     0.5, -0.5, -0.0,  1.0,  0.4,  0.4,
+     0.0,  0.5, -4,  0.4,  1.0,  0.4,
+    -0.5, -0.5, -4,  0.4,  1.0,  0.4,
+     0.5, -0.5, -4,  1.0,  0.4,  0.4,
 
-     0.0,  0.5, -2.0,  1.0,  0.4,  0.4,
-    -0.5, -0.5, -2.0,  1.0,  1.0,  0.4,
-     0.5, -0.5, -2.0,  1.0,  1.0,  0.4,
+     0.0,  0.5, -2,  1.0,  0.4,  0.4,
+    -0.5, -0.5, -2,  1.0,  1.0,  0.4,
+     0.5, -0.5, -2,  1.0,  1.0,  0.4,
 
-     0.0,  0.5, -4.0,  0.4,  0.4,  1.0,
-    -0.5, -0.5, -4.0,  0.4,  0.4,  1.0,
-     0.5, -0.5, -4.0,  1.0,  0.4,  0.4,
+     0.0,  0.5,  0.0,  0.4,  0.4,  1.0,
+    -0.5, -0.5,  0.0,  0.4,  0.4,  1.0,
+     0.5, -0.5,  0.0,  1.0,  0.4,  0.4,
   ]);
   const n = 9;
 
@@ -98,7 +96,7 @@ function initVertexBuffers(gl) {
   return n;
 }
 
-let g_eyeX = 0; angle = 0; projection = "p";
+let g_eyeX = 0; angle = 0; projection = "o";
 
 function keydown(ev, gl, canvas, n, modelMatrix, viewMatrix, projectionMatrix, mvPMatrix, u_MvpMatrix) {
   if (ev.keyCode == 39) { // Right
@@ -140,7 +138,7 @@ function draw(gl, canvas, n, modelMatrix, viewMatrix, projectionMatrix, mvPMatri
     // Set the clear color
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     // Clear the canvas
-    gl.clear(gl.DEPTH_BUFFER | gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT);
   
     // Draw Point
     gl.drawArrays(gl.TRIANGLES, 0, n);

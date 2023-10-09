@@ -2,9 +2,11 @@
 const VSHADER_SOURCE = `
 attribute vec4 a_Position;
 attribute vec4 a_Color;
+uniform mat4 u_ViewMatrix;
+uniform mat4 u_RotationMatrix;
 varying vec4 v_Color;
 void main() {
-    gl_Position = a_Position;
+    gl_Position = u_ViewMatrix * u_RotationMatrix * a_Position;
     gl_PointSize = 10.0;
     v_Color = a_Color;
 }`;
@@ -36,11 +38,21 @@ function main() {
 
   // TODO: Define Matrices
 
+  const u_RotationMatrix = gl.getUniformLocation(gl.program, 'u_RotationMatrix');
+  const u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+
+  if (!u_RotationMatrix && !u_ViewMatrix) {
+    console.log('Error finding locations of matrices');
+    return;
+  }
+
+  const rotationMatrix = new Matrix4();
+  const viewMatrix = new Matrix4();
 
   // TODO: Pass in Matrices to corresponding functions
-  document.onkeydown = function(ev) { keydown(ev, gl, n) }
+  document.onkeydown = function(ev) { keydown(ev, gl, n, u_RotationMatrix, u_ViewMatrix, rotationMatrix, viewMatrix) }
   
-  draw(gl, n)
+  draw(gl, n, u_RotationMatrix, u_ViewMatrix, rotationMatrix, viewMatrix)
 }
 
 function initVertexBuffers(gl) {
@@ -91,22 +103,27 @@ function initVertexBuffers(gl) {
 
 let g_eyeX = 0; angle = 0;
 
-function keydown(ev, gl, n) {
+function keydown(ev, gl, n, u_RotationMatrix, u_ViewMatrix, rotationMatrix, viewMatrix) {
   if (ev.keyCode == 39) { // Right
     g_eyeX -= 0.1;
   } else if (ev.keyCode == 37) { // Left
-    g_eyeX += 0.01;
+    g_eyeX += 0.1;
   } else if (ev.keyCode == 81) { // q
     angle += 1;
   } else if (ev.keyCode == 69) { // e
     angle -= 1;
   } else { return; }
-  draw(ev, gl, n)
+  draw(gl, n, u_RotationMatrix, u_ViewMatrix, rotationMatrix, viewMatrix)
 }
 
-function draw(gl, n) {
+function draw(gl, n, u_RotationMatrix, u_ViewMatrix, rotationMatrix, viewMatrix) {
 
     // TODO: Update the angles and eye point
+    rotationMatrix.setRotate(angle, 0, 0, 1);
+    viewMatrix.setLookAt(g_eyeX, 0, 0, 0, 0, -1, 0, 1, 0);
+
+    gl.uniformMatrix4fv(u_RotationMatrix, false, rotationMatrix.elements);
+    gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
 
     // Set the clear color
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
